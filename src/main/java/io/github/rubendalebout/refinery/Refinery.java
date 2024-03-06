@@ -2,12 +2,34 @@ package io.github.rubendalebout.refinery;
 
 import io.github.rubendalebout.factory.builders.ColorBuilder;
 import io.github.rubendalebout.factory.utils.StringUtils;
+import io.github.rubendalebout.refinery.manager.CommandManager;
+import io.github.rubendalebout.refinery.manager.RefineryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Refinery extends JavaPlugin {
+    /*
+     * *****************************************************************************
+     *  Start of manager variables
+     * *****************************************************************************
+     */
+    private CommandManager commandManager;
+    private RefineryManager refineryManager;
+    /*
+     * *****************************************************************************
+     *  End of manager variables
+     * *****************************************************************************
+     */
+
     @Override
     public void onEnable() {
+        this.commandManager = new CommandManager(this);
+        this.refineryManager = new RefineryManager();
+
+        // Add commands
+        this.commandManager.addCommand(new io.github.rubendalebout.refinery.commands.refinery.Refinery());
+        this.commandManager.register();
+
         // Plugin startup logic
         Bukkit.getServer().getConsoleSender().sendMessage(new ColorBuilder(new StringUtils().replaceAll("\n" +
                 "__________        _____.__                            \n" +

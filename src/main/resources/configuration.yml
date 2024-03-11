@@ -10,16 +10,16 @@
 refinery:
   wool:
     name: "&f&lWool"
-    material: WHITE_WOOL
+    material: WOOL
   terracotta:
     name: "&4&lTerracotta"
-    material: WHITE_TERRACOTTA
+    material: TERRACOTTA
   glazed_terracotta:
     name: "&c&lTerracotta"
-    material: WHITE_GLAZED_TERRACOTTA
+    material: GLAZED_TERRACOTTA
   stained_glass:
     name: "&7&lStained Glass"
-    material: WHITE_STAINED_GLASS
+    material: STAINED_GLASS
   stained_glass_pane:
     name: "&b&lStained Glass Pane"
-    material: WHITE_STAINED_GLASS_PANE
+    material: STAINED_GLASS_PANE

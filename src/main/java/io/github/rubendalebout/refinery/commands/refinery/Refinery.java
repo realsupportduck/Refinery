@@ -1,15 +1,10 @@
 package io.github.rubendalebout.refinery.commands.refinery;
 
 import io.github.rubendalebout.factory.builders.ColorBuilder;
-import io.github.rubendalebout.factory.builders.ItemBuilder;
-import io.github.rubendalebout.factory.builders.MenuBuilder;
 import io.github.rubendalebout.refinery.commands.RCommand;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
 
 import java.util.List;
 

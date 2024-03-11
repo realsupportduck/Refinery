@@ -5,15 +5,12 @@ import io.github.rubendalebout.factory.builders.ItemBuilder;
 import io.github.rubendalebout.factory.builders.MenuBuilder;
 import io.github.rubendalebout.factory.utils.StringUtils;
 import io.github.rubendalebout.refinery.Refinery;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class RefineryManager {
     private final Refinery plugin;
@@ -27,15 +24,22 @@ public class RefineryManager {
         this.plugin = plugin;
 
         for (String key : plugin.getConfigsManager().getFileConfiguration("configuration").getConfigurationSection("refinery").getKeys(false)) {
-            this.menuItems.put(key, new ItemBuilder(Material.valueOf(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key))))
-                            .name(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.name", key)))
+            this.menuItems.put(key, new ItemBuilder(Material.valueOf(String.format("%s_%s", this.color(0), plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key)))))
+                            .name(new ColorBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.name", key))).defaultPalette().build())
                     .build());
         }
 
         // Create Refinery menu
-        Inventory menu = new MenuBuilder(new ColorBuilder("&bRefinery Menu").defaultPalette().build(), 6)
+        Inventory menu = new MenuBuilder(new ColorBuilder("&a&lRefinery").defaultPalette().build(), Math.min(3 + this.menuItems.size() / 7, 6))
                 .background(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
                         .name(" ")
+                        .flag(ItemFlag.HIDE_ENCHANTS)
+                        .flag(ItemFlag.HIDE_ATTRIBUTES)
+                        .movable(false)
+                        .build())
+                .setItems(1, 1, this.menuItems.values().toArray(new ItemStack[0]), true)
+                .setItem(1, 9, new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
+                        .name(new ColorBuilder("&4&lClose").defaultPalette().build())
                         .flag(ItemFlag.HIDE_ENCHANTS)
                         .flag(ItemFlag.HIDE_ATTRIBUTES)
                         .movable(false)
@@ -78,7 +82,7 @@ public class RefineryManager {
     public String color(int number) {
         switch (number) {
             default:
-                return "white";
+                return "WHITE";
         }
     }
 

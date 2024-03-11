@@ -3,6 +3,7 @@ package io.github.rubendalebout.refinery;
 import io.github.rubendalebout.factory.builders.ColorBuilder;
 import io.github.rubendalebout.factory.utils.StringUtils;
 import io.github.rubendalebout.refinery.manager.CommandManager;
+import io.github.rubendalebout.refinery.manager.ConfigsManager;
 import io.github.rubendalebout.refinery.manager.RefineryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,6 +14,7 @@ public final class Refinery extends JavaPlugin {
      *  Start of manager variables
      * *****************************************************************************
      */
+    private ConfigsManager configsManager;
     private CommandManager commandManager;
     private RefineryManager refineryManager;
     /*
@@ -23,8 +25,9 @@ public final class Refinery extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        this.configsManager = new ConfigsManager(this);
         this.commandManager = new CommandManager(this);
-        this.refineryManager = new RefineryManager();
+        this.refineryManager = new RefineryManager(this);
 
         // Add commands
         this.commandManager.addCommand(new io.github.rubendalebout.refinery.commands.refinery.Refinery(this));
@@ -44,6 +47,10 @@ public final class Refinery extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+    }
+
+    public ConfigsManager getConfigsManager() {
+        return this.configsManager;
     }
 
     public RefineryManager getRefineryManager() {

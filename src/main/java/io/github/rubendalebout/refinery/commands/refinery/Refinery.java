@@ -14,6 +14,12 @@ import org.bukkit.inventory.ItemFlag;
 import java.util.List;
 
 public class Refinery extends RCommand {
+    private final io.github.rubendalebout.refinery.Refinery plugin;
+
+    public Refinery(io.github.rubendalebout.refinery.Refinery plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public String name() {
         return "refinery";
@@ -26,17 +32,8 @@ public class Refinery extends RCommand {
             return true;
         }
 
-        Inventory menu = new MenuBuilder(new ColorBuilder("&bRefinery Menu").defaultPalette().build(), 6)
-                .background(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
-                        .name(" ")
-                        .flag(ItemFlag.HIDE_ENCHANTS)
-                        .flag(ItemFlag.HIDE_ATTRIBUTES)
-                        .movable(false)
-                        .build())
-                .build();
-
         Player player = (Player) commandSender;
-        player.openInventory(menu);
+        player.openInventory(plugin.getRefineryManager().getMenu("main"));
         return true;
     }
 

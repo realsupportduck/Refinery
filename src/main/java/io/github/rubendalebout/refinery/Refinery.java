@@ -27,7 +27,7 @@ public final class Refinery extends JavaPlugin {
         this.refineryManager = new RefineryManager();
 
         // Add commands
-        this.commandManager.addCommand(new io.github.rubendalebout.refinery.commands.refinery.Refinery());
+        this.commandManager.addCommand(new io.github.rubendalebout.refinery.commands.refinery.Refinery(this));
         this.commandManager.register();
 
         // Plugin startup logic
@@ -44,5 +44,9 @@ public final class Refinery extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+    }
+
+    public RefineryManager getRefineryManager() {
+        return this.refineryManager;
     }
 }

@@ -7,3 +7,19 @@
 #             \/     \/              \/     \/       \/
 #
 # Made with <3 By DeZeeuw
+refinery:
+  wool:
+    name: "&f&lWool"
+    material: wool
+  terracotta:
+    name: "&4&lTerracotta"
+    material: terracotta
+  glazed_terracotta:
+    name: "&c&lTerracotta"
+    material: glazed_terracotta
+  stained_glass:
+    name: "&7&lStained Glass"
+    material: stained_glass
+  stained_glass_pane:
+    name: "&b&lStained Glass Pane"
+    material: stained_glass_pane

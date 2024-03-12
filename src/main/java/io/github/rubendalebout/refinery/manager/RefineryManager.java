@@ -59,6 +59,8 @@ public class RefineryManager {
                         .flag(ItemFlag.HIDE_ENCHANTS)
                         .flag(ItemFlag.HIDE_ATTRIBUTES)
                         .movable(false)
+                        .button(true)
+                        .addKey("ACTION", "CLOSE_INVENTORY")
                         .build())
                 .build();
 

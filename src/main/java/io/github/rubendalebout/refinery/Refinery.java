@@ -2,8 +2,10 @@ package io.github.rubendalebout.refinery;
 
 import io.github.rubendalebout.factory.builders.ColorBuilder;
 import io.github.rubendalebout.factory.utils.StringUtils;
+import io.github.rubendalebout.refinery.events.inventoryclick.InventoryClick;
 import io.github.rubendalebout.refinery.manager.CommandManager;
 import io.github.rubendalebout.refinery.manager.ConfigsManager;
+import io.github.rubendalebout.refinery.manager.EventsManager;
 import io.github.rubendalebout.refinery.manager.RefineryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,6 +18,7 @@ public final class Refinery extends JavaPlugin {
      */
     private ConfigsManager configsManager;
     private CommandManager commandManager;
+    private EventsManager eventsManager;
     private RefineryManager refineryManager;
     /*
      * *****************************************************************************
@@ -27,11 +30,17 @@ public final class Refinery extends JavaPlugin {
     public void onEnable() {
         this.configsManager = new ConfigsManager(this);
         this.commandManager = new CommandManager(this);
+        this.eventsManager = new EventsManager(this);
+
         this.refineryManager = new RefineryManager(this);
 
         // Add commands
         this.commandManager.addCommand(new io.github.rubendalebout.refinery.commands.refinery.Refinery(this));
         this.commandManager.register();
+
+        // Add events
+        this.eventsManager.addEvent(new InventoryClick(this));
+        this.eventsManager.register();
 
         // Plugin startup logic
         Bukkit.getServer().getConsoleSender().sendMessage(new ColorBuilder(new StringUtils().replaceAll("\n" +

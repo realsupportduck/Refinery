@@ -3,6 +3,7 @@ package io.github.rubendalebout.refinery.manager;
 import io.github.rubendalebout.factory.builders.ColorBuilder;
 import io.github.rubendalebout.factory.builders.ItemBuilder;
 import io.github.rubendalebout.factory.builders.MenuBuilder;
+import io.github.rubendalebout.factory.utils.ColorUtils;
 import io.github.rubendalebout.factory.utils.StringUtils;
 import io.github.rubendalebout.refinery.Refinery;
 import org.bukkit.Material;
@@ -10,6 +11,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class RefineryManager {
@@ -24,9 +26,23 @@ public class RefineryManager {
         this.plugin = plugin;
 
         for (String key : plugin.getConfigsManager().getFileConfiguration("configuration").getConfigurationSection("refinery").getKeys(false)) {
-            this.menuItems.put(key, new ItemBuilder(Material.valueOf(String.format("%s_%s", this.color(0), plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key)))))
-                            .name(new ColorBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.name", key))).defaultPalette().build())
-                    .build());
+            if (new ColorUtils().containsColor(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key)))) {
+                // contains color in the name
+                String[] split = new StringUtils().split(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key)), "_");
+                this.menuItems.put(key, new ItemBuilder(String.join("_", Arrays.copyOfRange(split, 1, split.length)), split[0]).build());
+            } else {
+                // contains no color in the name
+                try {
+                    this.menuItems.put(key, new ItemBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key)), (short) 0)
+                            .name(new ColorBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.name", key))).rgbPalette().defaultPalette().build())
+                            .build());
+                } catch (IllegalArgumentException e) {
+                    // Item does not exist with color
+                    this.menuItems.put(key, new ItemBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key)))
+                            .name(new ColorBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.name", key))).rgbPalette().defaultPalette().build())
+                            .build());
+                }
+            }
         }
 
         // Create Refinery menu

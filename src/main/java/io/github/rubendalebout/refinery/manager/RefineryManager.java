@@ -60,6 +60,7 @@ public class RefineryManager {
                                 .name(new ColorBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.name", key))).rgbPalette().defaultPalette().build())
                                 .amount(p)
                                 .button(true)
+                                .addKey("ACTION", "GET_ITEM")
                                 .build());
                     }
                 }

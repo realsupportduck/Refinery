@@ -1,6 +1,6 @@
 package io.github.rubendalebout.refinery.commands.refinery;
 
-import io.github.rubendalebout.factory.builders.ColorBuilder;
+import io.github.rubendalebout.refinery.builders.ColorBuilder;
 import io.github.rubendalebout.refinery.commands.RCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

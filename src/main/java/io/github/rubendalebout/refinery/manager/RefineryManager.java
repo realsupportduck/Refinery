@@ -1,11 +1,11 @@
 package io.github.rubendalebout.refinery.manager;
 
-import io.github.rubendalebout.factory.builders.ColorBuilder;
-import io.github.rubendalebout.factory.builders.ItemBuilder;
-import io.github.rubendalebout.factory.builders.MenuBuilder;
-import io.github.rubendalebout.factory.utils.ColorUtils;
-import io.github.rubendalebout.factory.utils.StringUtils;
 import io.github.rubendalebout.refinery.Refinery;
+import io.github.rubendalebout.refinery.builders.ColorBuilder;
+import io.github.rubendalebout.refinery.builders.ItemBuilder;
+import io.github.rubendalebout.refinery.builders.MenuBuilder;
+import io.github.rubendalebout.refinery.utils.ColorUtils;
+import io.github.rubendalebout.refinery.utils.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;

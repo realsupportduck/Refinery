@@ -1,9 +1,9 @@
 package io.github.rubendalebout.refinery.events.inventoryclick;
 
-import io.github.rubendalebout.factory.utils.ItemUtils;
 import io.github.rubendalebout.refinery.Refinery;
 import io.github.rubendalebout.refinery.enums.action.Action;
 import io.github.rubendalebout.refinery.events.REvents;
+import io.github.rubendalebout.refinery.utils.ItemUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -23,6 +23,9 @@ public class InventoryClick extends REvents {
         // Check if it is a menu
         if (plugin.getRefineryManager().isMenu(e.getClickedInventory())) {
             ItemStack item = e.getCurrentItem();
+
+            // Check if item is null
+            if (item == null) return;
 
             // Check if item is a button
             if (new ItemUtils().isButton(item)) {

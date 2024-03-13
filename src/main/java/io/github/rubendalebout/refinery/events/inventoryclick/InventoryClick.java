@@ -42,7 +42,7 @@ public class InventoryClick extends REvents {
 
                     switch (action) {
                         case OPEN_INVENTORY:
-                            player.sendMessage(new ItemUtils().getCustomTag(item, "OPEN_INVENTORY"));
+                            player.openInventory(plugin.getRefineryManager().getMenu(new ItemUtils().getCustomTag(item, "OPEN_INVENTORY")));
                             break;
                         case CLOSE_INVENTORY:
                             player.getOpenInventory().close();

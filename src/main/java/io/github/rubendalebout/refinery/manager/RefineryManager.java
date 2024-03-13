@@ -5,6 +5,7 @@ import io.github.rubendalebout.refinery.builders.ColorBuilder;
 import io.github.rubendalebout.refinery.builders.ItemBuilder;
 import io.github.rubendalebout.refinery.builders.MenuBuilder;
 import io.github.rubendalebout.refinery.utils.ColorUtils;
+import io.github.rubendalebout.refinery.utils.IntegerUtils;
 import io.github.rubendalebout.refinery.utils.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -26,33 +27,67 @@ public class RefineryManager {
         this.plugin = plugin;
 
         for (String key : plugin.getConfigsManager().getFileConfiguration("configuration").getConfigurationSection("refinery").getKeys(false)) {
+            // Item variable
+            String colorName = "";
+            short colorCode = 0;
+            String materialName;
             if (new ColorUtils().containsColor(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key)))) {
                 // contains color in the name
                 String[] split = new StringUtils().split(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key)), "_");
-                this.menuItems.put(key, new ItemBuilder(String.join("_", Arrays.copyOfRange(split, 1, split.length)), split[0])
-                        .name(new ColorBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.name", key))).rgbPalette().defaultPalette().build())
-                        .button(true)
-                        .addKey("ACTION", "OPEN_INVENTORY")
-                        .addKey("OPEN_INVENTORY", String.format("%s_menu_1", String.join("_", Arrays.copyOfRange(split, 1, split.length))))
-                        .build());
+                materialName = String.join("_", Arrays.copyOfRange(split, 1, split.length));
+                colorName = split[0];
             } else {
                 // contains no color in the name
-                try {
-                    this.menuItems.put(key, new ItemBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key)), (short) 0)
-                            .name(new ColorBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.name", key))).rgbPalette().defaultPalette().build())
-                            .button(true)
-                            .addKey("ACTION", "OPEN_INVENTORY")
-                            .addKey("OPEN_INVENTORY", String.format("%s_menu_1", plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key))))
-                            .build());
-                } catch (IllegalArgumentException e) {
-                    // Item does not exist with color
-                    this.menuItems.put(key, new ItemBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key)))
-                            .name(new ColorBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.name", key))).rgbPalette().defaultPalette().build())
-                            .button(true)
-                            .addKey("ACTION", "OPEN_INVENTORY")
-                            .addKey("OPEN_INVENTORY", String.format("%s_menu_1", plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key))))
-                            .build());
-                }
+                materialName = plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key));
+            }
+
+            this.menuItems.put(key, new ItemBuilder(materialName, (!colorName.isEmpty()) ? colorName : new ColorUtils().getColorName(colorCode))
+                    .name(new ColorBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.name", key))).rgbPalette().defaultPalette().build())
+                    .button(true)
+                    .addKey("ACTION", "OPEN_INVENTORY")
+                    .addKey("OPEN_INVENTORY", String.format("%s_menu_1", materialName))
+                    .build());
+
+            int totalPages = new ColorUtils().colors.size()/4;
+            for (int x = 1; x <= new ColorUtils().colors.size()/4; x++) {
+                this.menuList.put(String.format("%s_menu_%s", String.join("_", materialName), x), new MenuBuilder(new ColorBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.name", key))).rgbPalette().defaultPalette().build(), 6)
+                        .background(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
+                                .name(" ")
+                                .flag(ItemFlag.HIDE_ENCHANTS)
+                                .flag(ItemFlag.HIDE_ATTRIBUTES)
+                                .build())
+                        .setItem(6, 1, (x == 1 && x < totalPages) ? new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
+                                .name(" ")
+                                .flag(ItemFlag.HIDE_ENCHANTS)
+                                .flag(ItemFlag.HIDE_ATTRIBUTES)
+                                .build() : new ItemBuilder(Material.BLUE_STAINED_GLASS_PANE)
+                                .name(new ColorBuilder("&bPrevious page").defaultPalette().build())
+                                .flag(ItemFlag.HIDE_ENCHANTS)
+                                .flag(ItemFlag.HIDE_ATTRIBUTES)
+                                .button(true)
+                                .addKey("ACTION", "OPEN_INVENTORY")
+                                .addKey("OPEN_INVENTORY", String.format("%s_menu_%s", materialName, x-1))
+                                .build())
+                        .setItem(6, 9, (x == totalPages) ? new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
+                                .name(" ")
+                                .flag(ItemFlag.HIDE_ENCHANTS)
+                                .flag(ItemFlag.HIDE_ATTRIBUTES)
+                                .build() : new ItemBuilder(Material.BLUE_STAINED_GLASS_PANE)
+                                .name(new ColorBuilder("&bNext page").defaultPalette().build())
+                                .flag(ItemFlag.HIDE_ENCHANTS)
+                                .flag(ItemFlag.HIDE_ATTRIBUTES)
+                                .button(true)
+                                .addKey("ACTION", "OPEN_INVENTORY")
+                                .addKey("OPEN_INVENTORY", String.format("%s_menu_%s", materialName, x+1))
+                                .build())
+                        .setItem(1, 9, new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
+                                .name(new ColorBuilder("&4&lClose").defaultPalette().build())
+                                .flag(ItemFlag.HIDE_ENCHANTS)
+                                .flag(ItemFlag.HIDE_ATTRIBUTES)
+                                .button(true)
+                                .addKey("ACTION", "CLOSE_INVENTORY")
+                                .build())
+                        .build());
             }
         }
 

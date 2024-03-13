@@ -3,7 +3,6 @@ version: '${project.version}'
 main: io.github.rubendalebout.refinery.Refinery
 api-version: '1.20'
 author: DeZeeuw
-depend: [Factory]
 commands:
   refinery:
     usage: /<command>

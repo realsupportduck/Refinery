@@ -29,17 +29,28 @@ public class RefineryManager {
             if (new ColorUtils().containsColor(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key)))) {
                 // contains color in the name
                 String[] split = new StringUtils().split(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key)), "_");
-                this.menuItems.put(key, new ItemBuilder(String.join("_", Arrays.copyOfRange(split, 1, split.length)), split[0]).build());
+                this.menuItems.put(key, new ItemBuilder(String.join("_", Arrays.copyOfRange(split, 1, split.length)), split[0])
+                        .name(new ColorBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.name", key))).rgbPalette().defaultPalette().build())
+                        .button(true)
+                        .addKey("ACTION", "OPEN_INVENTORY")
+                        .addKey("OPEN_INVENTORY", String.format("%s_menu_1", String.join("_", Arrays.copyOfRange(split, 1, split.length))))
+                        .build());
             } else {
                 // contains no color in the name
                 try {
                     this.menuItems.put(key, new ItemBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key)), (short) 0)
                             .name(new ColorBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.name", key))).rgbPalette().defaultPalette().build())
+                            .button(true)
+                            .addKey("ACTION", "OPEN_INVENTORY")
+                            .addKey("OPEN_INVENTORY", String.format("%s_menu_1", plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key))))
                             .build());
                 } catch (IllegalArgumentException e) {
                     // Item does not exist with color
                     this.menuItems.put(key, new ItemBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key)))
                             .name(new ColorBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.name", key))).rgbPalette().defaultPalette().build())
+                            .button(true)
+                            .addKey("ACTION", "OPEN_INVENTORY")
+                            .addKey("OPEN_INVENTORY", String.format("%s_menu_1", plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.material", key))))
                             .build());
                 }
             }
@@ -51,14 +62,12 @@ public class RefineryManager {
                         .name(" ")
                         .flag(ItemFlag.HIDE_ENCHANTS)
                         .flag(ItemFlag.HIDE_ATTRIBUTES)
-                        .movable(false)
                         .build())
                 .setItems(1, 1, this.menuItems.values().toArray(new ItemStack[0]), true)
                 .setItem(1, 9, new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                         .name(new ColorBuilder("&4&lClose").defaultPalette().build())
                         .flag(ItemFlag.HIDE_ENCHANTS)
                         .flag(ItemFlag.HIDE_ATTRIBUTES)
-                        .movable(false)
                         .button(true)
                         .addKey("ACTION", "CLOSE_INVENTORY")
                         .build())

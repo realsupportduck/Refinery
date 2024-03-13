@@ -12,8 +12,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class RefineryManager {
     private final Refinery plugin;
@@ -50,18 +52,31 @@ public class RefineryManager {
 
             int totalPages = new ColorUtils().colors.size()/4;
             for (int x = 1; x <= new ColorUtils().colors.size()/4; x++) {
+                List<ItemStack> menuItems = new ArrayList<>();
+
+                for (int y = 0; y < 4; y ++) {
+                    for (int p = 1; p <= 64; p *= 2) {
+                        menuItems.add(new ItemBuilder(materialName, new ColorUtils().getColorName((short) (y + ((x > 1) ? 4*(x-1) : 0))))
+                                .name(new ColorBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.name", key))).rgbPalette().defaultPalette().build())
+                                .amount(p)
+                                .button(true)
+                                .build());
+                    }
+                }
+
                 this.menuList.put(String.format("%s_menu_%s", String.join("_", materialName), x), new MenuBuilder(new ColorBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.name", key))).rgbPalette().defaultPalette().build(), 6)
                         .background(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
                                 .name(" ")
                                 .flag(ItemFlag.HIDE_ENCHANTS)
                                 .flag(ItemFlag.HIDE_ATTRIBUTES)
                                 .build())
+                        .setItems(1, 1, menuItems.toArray(new ItemStack[0]), true)
                         .setItem(6, 1, (x == 1 && x < totalPages) ? new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
                                 .name(" ")
                                 .flag(ItemFlag.HIDE_ENCHANTS)
                                 .flag(ItemFlag.HIDE_ATTRIBUTES)
                                 .build() : new ItemBuilder(Material.BLUE_STAINED_GLASS_PANE)
-                                .name(new ColorBuilder("&bPrevious page").defaultPalette().build())
+                                .name(new ColorBuilder("&1Previous page").defaultPalette().build())
                                 .flag(ItemFlag.HIDE_ENCHANTS)
                                 .flag(ItemFlag.HIDE_ATTRIBUTES)
                                 .button(true)
@@ -73,7 +88,7 @@ public class RefineryManager {
                                 .flag(ItemFlag.HIDE_ENCHANTS)
                                 .flag(ItemFlag.HIDE_ATTRIBUTES)
                                 .build() : new ItemBuilder(Material.BLUE_STAINED_GLASS_PANE)
-                                .name(new ColorBuilder("&bNext page").defaultPalette().build())
+                                .name(new ColorBuilder("&1Next page").defaultPalette().build())
                                 .flag(ItemFlag.HIDE_ENCHANTS)
                                 .flag(ItemFlag.HIDE_ATTRIBUTES)
                                 .button(true)
@@ -86,6 +101,14 @@ public class RefineryManager {
                                 .flag(ItemFlag.HIDE_ATTRIBUTES)
                                 .button(true)
                                 .addKey("ACTION", "CLOSE_INVENTORY")
+                                .build())
+                        .setItem(1, 1, new ItemBuilder(Material.CYAN_STAINED_GLASS_PANE)
+                                .name(new ColorBuilder("&3&lOpen Refinery Menu").defaultPalette().build())
+                                .flag(ItemFlag.HIDE_ENCHANTS)
+                                .flag(ItemFlag.HIDE_ATTRIBUTES)
+                                .button(true)
+                                .addKey("ACTION", "OPEN_INVENTORY")
+                                .addKey("OPEN_INVENTORY", "main")
                                 .build())
                         .build());
             }

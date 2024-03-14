@@ -1,3 +1,4 @@
+![Logo](https://media.discordapp.net/attachments/1217756533895594014/1217756563612368966/refinery.png?ex=66052f2d&is=65f2ba2d&hm=1423d57cf0b2dc93f54481d5552d9767d3f614e234a93e058e578bd5459be913&=&format=webp&quality=lossless&height=150&width=150)
 # Refinery Plugin
 
 [![License: GPL v3.0](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)

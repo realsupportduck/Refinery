@@ -4,13 +4,20 @@ import io.github.rubendalebout.refinery.Refinery;
 import io.github.rubendalebout.refinery.builders.ItemBuilder;
 import io.github.rubendalebout.refinery.enums.action.Action;
 import io.github.rubendalebout.refinery.events.REvents;
+import io.github.rubendalebout.refinery.utils.ColorUtils;
 import io.github.rubendalebout.refinery.utils.ItemUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Colorable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InventoryClick extends REvents {
     private final Refinery plugin;
@@ -25,6 +32,8 @@ public class InventoryClick extends REvents {
 
         // Check if it is a menu
         if (plugin.getRefineryManager().isMenu(e.getClickedInventory())) {
+            e.setCancelled(true);
+
             ItemStack item = e.getCurrentItem();
 
             // Check if item is null
@@ -51,7 +60,6 @@ public class InventoryClick extends REvents {
                             player.getOpenInventory().close();
                             break;
                         case GET_ITEM:
-                            player.sendMessage("test");
                             ItemStack newItem;
                             if (item.getData() instanceof Colorable) {
                                 Colorable colorable = (Colorable) item.getData();
@@ -64,17 +72,63 @@ public class InventoryClick extends REvents {
                                         .build();
                             }
 
-                            player.sendMessage("test 2");
-
                             if (newItem == null) return;
 
-                            player.sendMessage("test 3");
-                            player.getInventory().addItem(newItem);
+                            if (this.removeItem(player.getInventory(), plugin.getRefineryManager().getTypeMenu(e.getClickedInventory()), this.getWoolColor(item), item.getAmount())) {
+                                player.getInventory().addItem(newItem);
+                            }
                             break;
                     }
                 }
             }
-            e.setCancelled(true);
+        }
+    }
+
+    public boolean removeItem(Inventory inventory, String material, String color, int amount) {
+        int amountLeftToRemove = amount;
+        List<ItemStack> itemsRemoved = new ArrayList<>();
+
+        // Loop door alle items in de inventory
+        for (ItemStack item : inventory.getContents()) {
+            if (item == null || !item.getType().name().contains(material.toUpperCase())) {
+                continue; // Ga naar het volgende item als het geen wol is
+            }
+
+            // Controleer de kleur van de wol
+            String woolColor = getWoolColor(item);
+            if (!woolColor.equalsIgnoreCase(color)) {
+                // Bereken hoeveel van deze kleur wol we kunnen verwijderen
+                int amountToRemoveFromStack = Math.min(item.getAmount(), amountLeftToRemove);
+
+                itemsRemoved.add(item.clone());
+                // Verwijder de wol van de stapel
+                item.setAmount(item.getAmount() - amountToRemoveFromStack);
+
+                // Update de hoeveelheid die nog verwijderd moet worden
+                amountLeftToRemove -= amountToRemoveFromStack;
+
+                // Als we alle wol hebben verwijderd die we wilden, stop dan met de loop
+                if (amountLeftToRemove <= 0) {
+                    break;
+                }
+            }
+        }
+
+        if (amountLeftToRemove != 0) {
+            for (ItemStack item : itemsRemoved)
+                inventory.addItem(item);
+        }
+
+        return amountLeftToRemove == 0;
+    }
+
+    private String getWoolColor(ItemStack item) {
+        if (Bukkit.getServer().getVersion().contains("1.13") || Bukkit.getServer().getVersion().contains("1.14") || Bukkit.getServer().getVersion().contains("1.15") || Bukkit.getServer().getVersion().contains("1.16") || Bukkit.getServer().getVersion().contains("1.17") || Bukkit.getServer().getVersion().contains("1.18") || Bukkit.getServer().getVersion().contains("1.19") || Bukkit.getServer().getVersion().contains("1.20")) {
+            return item.getType().name().split("_")[0];
+        } else {
+            short durability = item.getDurability();
+
+            return new ColorUtils().getColorName(durability).toUpperCase();
         }
     }
 }

@@ -2,6 +2,7 @@ package io.github.rubendalebout.refinery;
 
 import io.github.rubendalebout.refinery.builders.ColorBuilder;
 import io.github.rubendalebout.refinery.events.inventoryclick.InventoryClick;
+import io.github.rubendalebout.refinery.events.inventoryopen.InventoryOpen;
 import io.github.rubendalebout.refinery.manager.CommandManager;
 import io.github.rubendalebout.refinery.manager.ConfigsManager;
 import io.github.rubendalebout.refinery.manager.EventsManager;
@@ -43,6 +44,7 @@ public final class Refinery extends JavaPlugin {
 
         // Add events
         this.eventsManager.addEvent(new InventoryClick(this));
+        this.eventsManager.addEvent(new InventoryOpen(this));
         this.eventsManager.register();
 
         // Plugin startup logic

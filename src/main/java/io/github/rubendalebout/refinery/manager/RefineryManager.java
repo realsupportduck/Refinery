@@ -12,10 +12,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class RefineryManager {
     private final Refinery plugin;
@@ -150,6 +147,18 @@ public class RefineryManager {
 
     public Inventory getMenu(String name) {
         return this.menuList.getOrDefault(name, null);
+    }
+
+    public String getTypeMenu(Inventory menu) {
+        Optional<String> key = this.menuList.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().equals(menu))
+                .map(Map.Entry::getKey)
+                .findFirst();
+
+        // Check if key exists for the value
+        return key.map(s -> s.split("_")[0]).orElse(null);
+
     }
 
     public Inventory createMenu(String item) {

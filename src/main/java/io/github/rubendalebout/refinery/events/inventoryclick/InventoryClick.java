@@ -72,10 +72,13 @@ public class InventoryClick extends REvents {
                                         .build();
                             }
 
-                            if (newItem == null) return;
+                            if (newItem == null || e.getClickedInventory() == null) return;
 
-                            if (this.removeItem(player.getInventory(), plugin.getRefineryManager().getTypeMenu(e.getClickedInventory()), this.getWoolColor(item), item.getAmount())) {
+                            if (this.removeItem(player.getInventory(), plugin.getRefineryManager().getTypeMenu(e.getClickedInventory()), new ColorUtils().getColor(item), item.getAmount())) {
                                 player.getInventory().addItem(newItem);
+
+                                player.closeInventory();
+                                player.openInventory(plugin.getRefineryManager().getMenu(plugin.getRefineryManager().getCurrentMenu(e.getClickedInventory())));
                             }
                             break;
                     }
@@ -95,7 +98,7 @@ public class InventoryClick extends REvents {
             }
 
             // Controleer de kleur van de wol
-            String woolColor = getWoolColor(item);
+            String woolColor = new ColorUtils().getColor(item);
             if (!woolColor.equalsIgnoreCase(color)) {
                 // Bereken hoeveel van deze kleur wol we kunnen verwijderen
                 int amountToRemoveFromStack = Math.min(item.getAmount(), amountLeftToRemove);
@@ -120,15 +123,5 @@ public class InventoryClick extends REvents {
         }
 
         return amountLeftToRemove == 0;
-    }
-
-    private String getWoolColor(ItemStack item) {
-        if (Bukkit.getServer().getVersion().contains("1.13") || Bukkit.getServer().getVersion().contains("1.14") || Bukkit.getServer().getVersion().contains("1.15") || Bukkit.getServer().getVersion().contains("1.16") || Bukkit.getServer().getVersion().contains("1.17") || Bukkit.getServer().getVersion().contains("1.18") || Bukkit.getServer().getVersion().contains("1.19") || Bukkit.getServer().getVersion().contains("1.20")) {
-            return item.getType().name().split("_")[0];
-        } else {
-            short durability = item.getDurability();
-
-            return new ColorUtils().getColorName(durability).toUpperCase();
-        }
     }
 }

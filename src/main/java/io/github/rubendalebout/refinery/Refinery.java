@@ -9,6 +9,7 @@ import io.github.rubendalebout.refinery.manager.EventsManager;
 import io.github.rubendalebout.refinery.manager.RefineryManager;
 import io.github.rubendalebout.refinery.utils.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Refinery extends JavaPlugin {
@@ -61,6 +62,9 @@ public final class Refinery extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        for (Player player : Bukkit.getServer().getOnlinePlayers())
+            if (this.getRefineryManager() != null && this.getRefineryManager().isMenu(player.getOpenInventory().getTopInventory()))
+                player.closeInventory();
     }
 
     public static Refinery getInstance() {

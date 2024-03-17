@@ -4,8 +4,10 @@ import io.github.rubendalebout.refinery.Refinery;
 import io.github.rubendalebout.refinery.builders.ColorBuilder;
 import io.github.rubendalebout.refinery.builders.ItemBuilder;
 import io.github.rubendalebout.refinery.builders.MenuBuilder;
+import io.github.rubendalebout.refinery.objects.RefineryMenu;
 import io.github.rubendalebout.refinery.utils.ColorUtils;
 import io.github.rubendalebout.refinery.utils.IntegerUtils;
+import io.github.rubendalebout.refinery.utils.ItemUtils;
 import io.github.rubendalebout.refinery.utils.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -13,11 +15,12 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class RefineryManager {
     private final Refinery plugin;
 
-    private HashMap<String, Inventory> menuList = new HashMap<>();
+    private HashMap<String, RefineryMenu> menuList = new HashMap<>();
     private HashMap<String, ItemStack> menuItems = new HashMap<>();
 
     private HashMap<String, Material> materialList = new HashMap<String, Material>();
@@ -45,6 +48,7 @@ public class RefineryManager {
                     .button(true)
                     .addKey("ACTION", "OPEN_INVENTORY")
                     .addKey("OPEN_INVENTORY", String.format("%s_menu_1", materialName))
+                    .addKey("REFINE_ITEM", materialName)
                     .build());
 
             int totalPages = new ColorUtils().colors.size()/4;
@@ -58,21 +62,24 @@ public class RefineryManager {
                                 .amount(p)
                                 .button(true)
                                 .addKey("ACTION", "GET_ITEM")
+                                .addKey("REFINE_ITEM", materialName)
                                 .build());
                     }
                 }
 
-                this.menuList.put(String.format("%s_menu_%s", String.join("_", materialName), x), new MenuBuilder(new ColorBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.name", key))).rgbPalette().defaultPalette().build(), 6)
+                this.menuList.put(String.format("%s_menu_%s", String.join("_", materialName), x), new RefineryMenu(key, new ColorBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.name", key))).rgbPalette().defaultPalette().build(), new MenuBuilder(new ColorBuilder(plugin.getConfigsManager().getFileConfiguration("configuration").getString(String.format("refinery.%s.name", key))).rgbPalette().defaultPalette().build(), 6)
                         .background(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
                                 .name(" ")
                                 .flag(ItemFlag.HIDE_ENCHANTS)
                                 .flag(ItemFlag.HIDE_ATTRIBUTES)
+                                .addKey("REFINE_ITEM", materialName)
                                 .build())
                         .setItems(1, 1, menuItems.toArray(new ItemStack[0]), true)
                         .setItem(6, 1, (x == 1 && x < totalPages) ? new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
                                 .name(" ")
                                 .flag(ItemFlag.HIDE_ENCHANTS)
                                 .flag(ItemFlag.HIDE_ATTRIBUTES)
+                                .addKey("REFINE_ITEM", materialName)
                                 .build() : new ItemBuilder(Material.BLUE_STAINED_GLASS_PANE)
                                 .name(new ColorBuilder("&1Previous page").defaultPalette().build())
                                 .flag(ItemFlag.HIDE_ENCHANTS)
@@ -80,11 +87,13 @@ public class RefineryManager {
                                 .button(true)
                                 .addKey("ACTION", "OPEN_INVENTORY")
                                 .addKey("OPEN_INVENTORY", String.format("%s_menu_%s", materialName, x-1))
+                                .addKey("REFINE_ITEM", materialName)
                                 .build())
                         .setItem(6, 9, (x == totalPages) ? new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
                                 .name(" ")
                                 .flag(ItemFlag.HIDE_ENCHANTS)
                                 .flag(ItemFlag.HIDE_ATTRIBUTES)
+                                .addKey("REFINE_ITEM", materialName)
                                 .build() : new ItemBuilder(Material.BLUE_STAINED_GLASS_PANE)
                                 .name(new ColorBuilder("&1Next page").defaultPalette().build())
                                 .flag(ItemFlag.HIDE_ENCHANTS)
@@ -92,6 +101,7 @@ public class RefineryManager {
                                 .button(true)
                                 .addKey("ACTION", "OPEN_INVENTORY")
                                 .addKey("OPEN_INVENTORY", String.format("%s_menu_%s", materialName, x+1))
+                                .addKey("REFINE_ITEM", materialName)
                                 .build())
                         .setItem(1, 9, new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                                 .name(new ColorBuilder("&4&lClose").defaultPalette().build())
@@ -99,6 +109,8 @@ public class RefineryManager {
                                 .flag(ItemFlag.HIDE_ATTRIBUTES)
                                 .button(true)
                                 .addKey("ACTION", "CLOSE_INVENTORY")
+                                .addKey("REFINE_ITEM", materialName)
+                                .addKey("CURRENT_MENU", String.format("%s_menu_%s", materialName, x))
                                 .build())
                         .setItem(1, 1, new ItemBuilder(Material.CYAN_STAINED_GLASS_PANE)
                                 .name(new ColorBuilder("&3&lOpen Refinery Menu").defaultPalette().build())
@@ -107,8 +119,9 @@ public class RefineryManager {
                                 .button(true)
                                 .addKey("ACTION", "OPEN_INVENTORY")
                                 .addKey("OPEN_INVENTORY", "main")
+                                .addKey("REFINE_ITEM", materialName)
                                 .build())
-                        .build());
+                        .build()));
             }
         }
 
@@ -118,6 +131,7 @@ public class RefineryManager {
                         .name(" ")
                         .flag(ItemFlag.HIDE_ENCHANTS)
                         .flag(ItemFlag.HIDE_ATTRIBUTES)
+                        .addKey("REFINE_ITEM", "main")
                         .build())
                 .setItems(1, 1, this.menuItems.values().toArray(new ItemStack[0]), true)
                 .setItem(1, 9, new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
@@ -125,16 +139,12 @@ public class RefineryManager {
                         .flag(ItemFlag.HIDE_ENCHANTS)
                         .flag(ItemFlag.HIDE_ATTRIBUTES)
                         .button(true)
+                        .addKey("REFINE_ITEM", "main")
                         .addKey("ACTION", "CLOSE_INVENTORY")
                         .build())
                 .build();
 
-        this.addMenu("main", menu);
-    }
-
-    public void addMenu(String name, Inventory menu) {
-        if (!this.menuList.containsValue(menu))
-            this.menuList.put(name, menu);
+        this.menuList.put("main", new RefineryMenu("", new ColorBuilder("&a&lRefinery").defaultPalette().build(), menu));
     }
 
     public void removeMenu(String name) {
@@ -142,50 +152,41 @@ public class RefineryManager {
     }
 
     public boolean isMenu(Inventory menu) {
-        return this.menuList.containsValue(menu);
+        if (menu == null) return false;
+
+        return Arrays.stream(menu.getContents())
+                .filter(Objects::nonNull)
+                .filter(item -> new ItemUtils().hasCustomTag(item, "REFINE_ITEM"))
+                .anyMatch(item -> new ItemUtils().hasCustomTag(item,"REFINE_ITEM"));
     }
 
     public Inventory getMenu(String name) {
-        return this.menuList.getOrDefault(name, null);
+        if (this.menuList.containsKey(name)) {
+            return this.menuList.get(name).getMenu();
+        }
+        return null;
     }
 
     public String getTypeMenu(Inventory menu) {
-        Optional<String> key = this.menuList.entrySet()
-                .stream()
-                .filter(entry -> entry.getValue().equals(menu))
-                .map(Map.Entry::getKey)
+        Optional<String> key = Arrays.stream(menu.getContents())
+                .filter(Objects::nonNull)
+                .filter(item -> new ItemUtils().hasCustomTag(item, "REFINE_ITEM"))
+                .map(item -> new ItemUtils().getCustomTag(item, "REFINE_ITEM"))
                 .findFirst();
 
         // Check if key exists for the value
-        return key.map(s -> s.split("_")[0]).orElse(null);
-
+        return key.orElse(null);
     }
 
-    public Inventory createMenu(String item) {
-        return new MenuBuilder(new ColorBuilder("&bRefinery Menu").defaultPalette().build(), 6)
-                .background(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
-                        .name(" ")
-                        .flag(ItemFlag.HIDE_ENCHANTS)
-                        .flag(ItemFlag.HIDE_ATTRIBUTES)
-                        .movable(false)
-                        .build())
-                .setItem(1, 1, new ItemBuilder(Material.valueOf(new StringUtils().capitalize(String.format("%s_%s", this.color(0), "wool"))))
-                        .build())
-                .build();
-    }
+    public String getCurrentMenu(Inventory menu) {
+        Optional<String> key = Arrays.stream(menu.getContents())
+                .filter(Objects::nonNull)
+                .filter(item -> new ItemUtils().hasCustomTag(item, "CURRENT_MENU"))
+                .map(item -> new ItemUtils().getCustomTag(item, "CURRENT_MENU"))
+                .findFirst();
 
-    public String color(int number) {
-        switch (number) {
-            default:
-                return "WHITE";
-        }
-    }
-
-    public int color(String name) {
-        switch (name) {
-            default:
-                return 0;
-        }
+        // Check if key exists for the value
+        return key.orElse(null);
     }
 
     public HashMap<String, Material> getMaterialList() {

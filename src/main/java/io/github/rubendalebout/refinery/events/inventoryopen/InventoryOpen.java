@@ -1,8 +1,11 @@
 package io.github.rubendalebout.refinery.events.inventoryopen;
 
 import io.github.rubendalebout.refinery.Refinery;
+import io.github.rubendalebout.refinery.builders.ColorBuilder;
+import io.github.rubendalebout.refinery.builders.ItemBuilder;
 import io.github.rubendalebout.refinery.enums.action.Action;
 import io.github.rubendalebout.refinery.events.REvents;
+import io.github.rubendalebout.refinery.utils.ColorUtils;
 import io.github.rubendalebout.refinery.utils.ItemUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -27,25 +30,28 @@ public class InventoryOpen extends REvents {
         if (plugin.getRefineryManager().isMenu(menu)) {
             if (!plugin.getRefineryManager().getMenu("main").equals(menu)) {
                 String material = plugin.getRefineryManager().getTypeMenu(menu).toLowerCase();
-                int equalsAmount = 0;
-
-                for (ItemStack item : player.getInventory().getContents()) {
-                    if (item != null && item.getType().name().toLowerCase().contains(material)) {
-                        equalsAmount += item.getAmount();
-                    }
-                }
 
                 // Loop through the inventory
                 for (int i = 0; i < menu.getSize(); i++) {
                     ItemStack item = menu.getItem(i);
+                    int equalsAmount = 0;
 
                     if (item != null && new ItemUtils().isButton(item)) {
                         Action action = Action.valueOf(new ItemUtils().getCustomTag(item, "ACTION"));
 
                         if (!action.name().isEmpty() && action.name().equalsIgnoreCase("get_item")) {
+                            for (ItemStack p : player.getInventory().getContents()) {
+                                if (p != null && p.getType().name().toLowerCase().contains(material)) {
+                                    if (!new ColorUtils().getColor(p).equalsIgnoreCase(new ColorUtils().getColor(item))) {
+                                        equalsAmount += p.getAmount();
+                                    }
+                                }
+                            }
                             if (item.getAmount() > equalsAmount) {
-                                item.setType(Material.BARRIER);
-                                menu.setItem(i, item);
+                                menu.setItem(i, new ItemBuilder(Material.BARRIER)
+                                        .name(new ColorBuilder("&4✘").defaultPalette().rgbPalette().build())
+                                        .amount(item.getAmount())
+                                        .build());
                             }
                         }
                     }

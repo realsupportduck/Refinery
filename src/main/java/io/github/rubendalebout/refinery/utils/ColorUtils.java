@@ -1,6 +1,8 @@
 package io.github.rubendalebout.refinery.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,5 +46,15 @@ public class ColorUtils {
     public boolean containsColor(String materialName) {
         return this.colors.entrySet().stream()
                 .anyMatch(e -> materialName.contains(e.getValue().name()));
+    }
+
+    public String getColor(ItemStack item) {
+        if (Bukkit.getServer().getVersion().contains("1.13") || Bukkit.getServer().getVersion().contains("1.14") || Bukkit.getServer().getVersion().contains("1.15") || Bukkit.getServer().getVersion().contains("1.16") || Bukkit.getServer().getVersion().contains("1.17") || Bukkit.getServer().getVersion().contains("1.18") || Bukkit.getServer().getVersion().contains("1.19") || Bukkit.getServer().getVersion().contains("1.20")) {
+            return (this.containsColor(item.getType().name().split("_")[0])) ? item.getType().name().split("_")[0] : "";
+        } else {
+            short durability = item.getDurability();
+
+            return this.getColorName(durability).toUpperCase();
+        }
     }
 }

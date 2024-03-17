@@ -1,7 +1,7 @@
 name: Refinery
 version: '${project.version}'
 main: io.github.rubendalebout.refinery.Refinery
-api-version: '1.20'
+api-version: '1.13'
 author: DeZeeuw
 commands:
   refinery:

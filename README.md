@@ -2,7 +2,7 @@
 # Refinery Plugin
 
 [![License: GPL v3.0](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Minecraft Version](https://img.shields.io/badge/Minecraft-1.20.1+-brightgreen)](https://www.minecraft.net/)
+[![Minecraft Version](https://img.shields.io/badge/Minecraft-1.14&minus;1.20-brightgreen)](https://www.minecraft.net/)
 [![Java Version](https://img.shields.io/badge/Java-8%2B-orange)](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)
 
 Refinery is a powerful plugin for Minecraft, facilitating easy conversion of blocks into different colors via a convenient menu interface. This tool streamlines the process of altering block colors, providing a seamless experience for players and developers alike.

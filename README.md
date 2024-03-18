@@ -26,3 +26,7 @@ To utilize Refinery within your Minecraft server, simply follow these steps:
 1. Open the refining menu interface by using the corresponding /command.
 2. Click the item you want to recolor.
 3. Left-click the item with the color you want with the amount of it.
+
+## Commands:
+- /refinery (refinery.refinery)
+- /refinery reload (refinery.reload)

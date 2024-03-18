@@ -24,5 +24,5 @@ Refinery is a powerful plugin for Minecraft, facilitating easy conversion of blo
 To utilize Refinery within your Minecraft server, simply follow these steps:
 
 1. Open the refining menu interface by using the corresponding /command.
-2. Use the correct /command for example; /wool.
-3. Choose the new color from the available options by clicking with left on the blocks you want to use and right click on the new color.
+2. Click the item you want to recolor.
+3. Left click the item with the color you want with the amount of it.

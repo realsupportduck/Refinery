@@ -11,6 +11,9 @@ import java.util.Optional;
 public class ColorUtils {
     public HashMap<Short, DyeColor> colors = new HashMap<>();
 
+    /**
+     * The constructor of the Color utils class
+     */
     public ColorUtils() {
         this.colors.put((short) 0, DyeColor.WHITE);
         this.colors.put((short) 1, DyeColor.BLACK);
@@ -32,10 +35,20 @@ public class ColorUtils {
 
     }
 
+    /**
+     * Get the color name of short code
+     * @param color The short code
+     * @return The color name or WHITE
+     */
     public String getColorName(short color) {
         return (this.colors.get(color) != null) ? this.colors.get(color).name() : DyeColor.WHITE.name();
     }
 
+    /**
+     * Get the short code of the color string
+     * @param color The color name
+     * @return The color short code or 0
+     */
     public Short getColorShort(String color) {
         Optional<Map.Entry<Short, DyeColor>> entry = colors.entrySet().stream()
                 .filter(e -> e.getValue().name().equals(color))
@@ -43,11 +56,21 @@ public class ColorUtils {
         return (entry.map(Map.Entry::getKey).orElse(null) != null) ? entry.map(Map.Entry::getKey).orElse(null) : 0;
     }
 
+    /**
+     * Check if an item has color
+     * @param materialName The material name
+     * @return Has color true or false
+     */
     public boolean containsColor(String materialName) {
         return this.colors.entrySet().stream()
                 .anyMatch(e -> materialName.contains(e.getValue().name()));
     }
 
+    /**
+     * Get the color of an item
+     * @param item The item you want the color of
+     * @return The color
+     */
     public String getColor(ItemStack item) {
         if (Bukkit.getServer().getVersion().contains("1.13") || Bukkit.getServer().getVersion().contains("1.14") || Bukkit.getServer().getVersion().contains("1.15") || Bukkit.getServer().getVersion().contains("1.16") || Bukkit.getServer().getVersion().contains("1.17") || Bukkit.getServer().getVersion().contains("1.18") || Bukkit.getServer().getVersion().contains("1.19") || Bukkit.getServer().getVersion().contains("1.20")) {
             return (this.containsColor(item.getType().name().split("_")[0])) ? item.getType().name().split("_")[0] : "";

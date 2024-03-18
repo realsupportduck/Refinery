@@ -13,7 +13,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Refinery extends JavaPlugin {
+    /*
+     * *****************************************************************************
+     *  Start of variables
+     * *****************************************************************************
+     */
     private static Refinery instance;
+    /*
+     * *****************************************************************************
+     *  End of variables
+     * *****************************************************************************
+     */
+
     /*
      * *****************************************************************************
      *  Start of manager variables
@@ -31,8 +42,10 @@ public final class Refinery extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // Load instance
         instance = this;
 
+        // Send message if version is below 1.14
         if (!Bukkit.getServer().getVersion().contains("1.14") && !Bukkit.getServer().getVersion().contains("1.15") && !Bukkit.getServer().getVersion().contains("1.16") && !Bukkit.getServer().getVersion().contains("1.17") && !Bukkit.getServer().getVersion().contains("1.18") && !Bukkit.getServer().getVersion().contains("1.19") && !Bukkit.getServer().getVersion().contains("1.20")) {
             Bukkit.getServer().getConsoleSender().sendMessage(new ColorBuilder(new StringUtils().replaceAll("\n" +
                     "__________        _____.__                            \n" +
@@ -41,28 +54,28 @@ public final class Refinery extends JavaPlugin {
                     " |    |   \\  ___/|  |  |  |   |  \\  ___/|  | \\/\\___  |\n" +
                     " |____|_  /\\___  >__|  |__|___|  /\\___  >__|   / ____|\n" +
                     "        \\/     \\/              \\/     \\/       \\/     \n\n" +
-                    String.format("&cMade with &4<3 &cBy &4%s &cSorry but we &4do not support &cyour server version!\n", String.join("&c, &4", this.getDescription().getAuthors()), this.getDescription().getVersion()), "\n", "&7\n&4")).defaultPalette().build());
+                    String.format("&cMade with &4<3 &cBy &4%s &cSorry but we &4do not support &cyour server version!\n", String.join("&c, &4", this.getDescription().getAuthors())), "\n", "&7\n&4")).defaultPalette().build());
 
             Bukkit.getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
+        // Load managers
         this.configsManager = new ConfigsManager(this);
         this.commandManager = new CommandManager(this);
         this.eventsManager = new EventsManager(this);
-
         this.refineryManager = new RefineryManager(this);
 
         // Add commands
-        this.commandManager.addCommand(new io.github.rubendalebout.refinery.commands.refinery.Refinery(this));
-        this.commandManager.register();
+        this.getCommandManager().addCommand(new io.github.rubendalebout.refinery.commands.refinery.Refinery(this));
+        this.getCommandManager().register();
 
         // Add events
-        this.eventsManager.addEvent(new InventoryClick(this));
-        this.eventsManager.addEvent(new InventoryOpen(this));
-        this.eventsManager.register();
+        this.getEventsManager().addEvent(new InventoryClick(this));
+        this.getEventsManager().addEvent(new InventoryOpen(this));
+        this.getEventsManager().register();
 
-        // Plugin startup logic
+        // Plugin startup message
         Bukkit.getServer().getConsoleSender().sendMessage(new ColorBuilder(new StringUtils().replaceAll("\n" +
                 "__________        _____.__                            \n" +
                 "\\______   \\ _____/ ____\\__| ____   ___________ ___.__.\n" +
@@ -83,15 +96,43 @@ public final class Refinery extends JavaPlugin {
         Bukkit.getServer().getConsoleSender().sendMessage(new ColorBuilder(String.format("&cDisabled &4%s", this.getDescription().getName())).defaultPalette().build());
     }
 
+    /*
+     * *****************************************************************************
+     *  Start of getters
+     * *****************************************************************************
+     */
     public static Refinery getInstance() {
         return instance;
+    }
+    /*
+     * *****************************************************************************
+     *  End of getters
+     * *****************************************************************************
+     */
+
+    /*
+     * *****************************************************************************
+     *  Start of manager getters
+     * *****************************************************************************
+     */
+    public CommandManager getCommandManager() {
+        return this.commandManager;
     }
 
     public ConfigsManager getConfigsManager() {
         return this.configsManager;
     }
 
+    public EventsManager getEventsManager() {
+        return this.eventsManager;
+    }
+
     public RefineryManager getRefineryManager() {
         return this.refineryManager;
     }
+    /*
+     * *****************************************************************************
+     *  End of manager getters
+     * *****************************************************************************
+     */
 }

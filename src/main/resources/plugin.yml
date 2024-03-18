@@ -8,3 +8,4 @@ commands:
     usage: /<command>
     aliases:
       - ref
+    permission: refinery.refinery

@@ -9,6 +9,9 @@
 # Made with <3 By DeZeeuw
 # Supporting following item(s): Banner, Glazed Terracotta, Stained Glass, Stained Glass Pane, Terracotta, Wool
 refinery:
+  banner:
+    name: "&3&lBanner"
+    material: BANNER
   wool:
     name: "&f&lWool"
     material: WOOL

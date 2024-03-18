@@ -28,6 +28,18 @@ public class RefineryManager {
     public RefineryManager(Refinery plugin) {
         this.plugin = plugin;
 
+        this.register();
+    }
+
+    public void reload() {
+        this.menuList = new HashMap<>();
+        this.menuItems = new HashMap<>();
+        this.materialList = new HashMap<>();
+
+        this.register();
+    }
+
+    private void register() {
         for (String key : plugin.getConfigsManager().getFileConfiguration("configuration").getConfigurationSection("refinery").getKeys(false)) {
             // Item variable
             String colorName = "";

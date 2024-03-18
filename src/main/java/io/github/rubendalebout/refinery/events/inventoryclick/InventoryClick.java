@@ -58,6 +58,7 @@ public class InventoryClick extends REvents {
                             break;
                         case GET_ITEM:
                             ItemStack newItem;
+
                             if (item.getData() instanceof Colorable) {
                                 Colorable colorable = (Colorable) item.getData();
                                 newItem = new ItemBuilder(item.getType().name(), colorable.getColor().name())

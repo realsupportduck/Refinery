@@ -35,7 +35,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder(String material, short color) {
-        if (Bukkit.getServer().getVersion().contains("1.13") || Bukkit.getServer().getVersion().contains("1.14") || Bukkit.getServer().getVersion().contains("1.15") || Bukkit.getServer().getVersion().contains("1.16") || Bukkit.getServer().getVersion().contains("1.17") || Bukkit.getServer().getVersion().contains("1.18") || Bukkit.getServer().getVersion().contains("1.19") || Bukkit.getServer().getVersion().contains("1.20")) {
+        if (Bukkit.getServer().getVersion().contains("1.14") || Bukkit.getServer().getVersion().contains("1.15") || Bukkit.getServer().getVersion().contains("1.16") || Bukkit.getServer().getVersion().contains("1.17") || Bukkit.getServer().getVersion().contains("1.18") || Bukkit.getServer().getVersion().contains("1.19") || Bukkit.getServer().getVersion().contains("1.20")) {
             this.itemStack = new ItemStack(Material.valueOf(new StringUtils().capitalize(String.format("%s_%s", new ColorUtils().getColorName(color), material))));
         } else {
             this.itemStack = new ItemStack(Material.valueOf(new StringUtils().capitalize(material)), color);
@@ -43,7 +43,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder(String material, String color) {
-        if (Bukkit.getServer().getVersion().contains("1.13") || Bukkit.getServer().getVersion().contains("1.14") || Bukkit.getServer().getVersion().contains("1.15") || Bukkit.getServer().getVersion().contains("1.16") || Bukkit.getServer().getVersion().contains("1.17") || Bukkit.getServer().getVersion().contains("1.18") || Bukkit.getServer().getVersion().contains("1.19") || Bukkit.getServer().getVersion().contains("1.20")) {
+        if (Bukkit.getServer().getVersion().contains("1.14") || Bukkit.getServer().getVersion().contains("1.15") || Bukkit.getServer().getVersion().contains("1.16") || Bukkit.getServer().getVersion().contains("1.17") || Bukkit.getServer().getVersion().contains("1.18") || Bukkit.getServer().getVersion().contains("1.19") || Bukkit.getServer().getVersion().contains("1.20")) {
             this.itemStack = new ItemStack(Material.valueOf(new StringUtils().capitalize(String.format("%s_%s", color, material))));
         } else {
             this.itemStack = new ItemStack(Material.valueOf(new StringUtils().capitalize(material)), new ColorUtils().getColorShort(color));

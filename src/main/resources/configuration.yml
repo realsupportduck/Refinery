@@ -7,9 +7,7 @@
 #             \/     \/              \/     \/       \/
 #
 # Made with <3 By DeZeeuw
-# Supporting: Dutch (nl), English (en), French (fr) and Spanish (es)
-language: 'en'
-# Supporting following item(s): Glazed Terracotta, Stained Glass, Stained Glass Pane, Terracotta, Wool, Banner
+# Supporting following item(s): Banner, Glazed Terracotta, Stained Glass, Stained Glass Pane, Terracotta, Wool
 refinery:
   wool:
     name: "&f&lWool"

@@ -48,7 +48,7 @@ public class InventoryOpen extends REvents {
                                 }
                             }
                             if (item.getAmount() > equalsAmount) {
-                                menu.setItem(i, new ItemBuilder(Material.BARRIER)
+                                menu.setItem(i, new ItemBuilder(Material.valueOf("BARRIER"))
                                         .name(new ColorBuilder("&4✘").defaultPalette().rgbPalette().build())
                                         .amount(item.getAmount())
                                         .build());

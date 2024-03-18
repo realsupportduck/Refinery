@@ -33,6 +33,20 @@ public final class Refinery extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
+        if (!Bukkit.getServer().getVersion().contains("1.14") && !Bukkit.getServer().getVersion().contains("1.15") && !Bukkit.getServer().getVersion().contains("1.16") && !Bukkit.getServer().getVersion().contains("1.17") && !Bukkit.getServer().getVersion().contains("1.18") && !Bukkit.getServer().getVersion().contains("1.19") && !Bukkit.getServer().getVersion().contains("1.20")) {
+            Bukkit.getServer().getConsoleSender().sendMessage(new ColorBuilder(new StringUtils().replaceAll("\n" +
+                    "__________        _____.__                            \n" +
+                    "\\______   \\ _____/ ____\\__| ____   ___________ ___.__.\n" +
+                    " |       _// __ \\   __\\|  |/    \\_/ __ \\_  __ <   |  |\n" +
+                    " |    |   \\  ___/|  |  |  |   |  \\  ___/|  | \\/\\___  |\n" +
+                    " |____|_  /\\___  >__|  |__|___|  /\\___  >__|   / ____|\n" +
+                    "        \\/     \\/              \\/     \\/       \\/     \n\n" +
+                    String.format("&cMade with &4<3 &cBy &4%s &cSorry but we &4do not support &cyour server version!\n", String.join("&c, &4", this.getDescription().getAuthors()), this.getDescription().getVersion()), "\n", "&7\n&4")).defaultPalette().build());
+
+            Bukkit.getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
         this.configsManager = new ConfigsManager(this);
         this.commandManager = new CommandManager(this);
         this.eventsManager = new EventsManager(this);
@@ -65,6 +79,8 @@ public final class Refinery extends JavaPlugin {
         for (Player player : Bukkit.getServer().getOnlinePlayers())
             if (this.getRefineryManager() != null && this.getRefineryManager().isMenu(player.getOpenInventory().getTopInventory()))
                 player.closeInventory();
+
+        Bukkit.getServer().getConsoleSender().sendMessage(new ColorBuilder(String.format("&cDisabled &4%s", this.getDescription().getName())).defaultPalette().build());
     }
 
     public static Refinery getInstance() {
